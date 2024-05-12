@@ -1,0 +1,56 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+.main {
+    height: 100vh;
+    width: 100%;
+    /* background:linear-gradient(13deg , rgb(226, 154, 20), red , blue); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Hide arrows (spinners) on number inputs */
+input[type="number"] {
+    -webkit-appearance: textfield; /* Chrome, Safari, Edge */
+    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield; /* Standard */
+}
+
+/* Optional: style the input for visual consistency */
+.main input[type="number"] {
+    padding: 10px 20px 15px 12px;
+    margin: 20px;
+    border: 1px solid #000000fb; /* Example border styling */
+    border-radius: 5px; /* Example border radius */
+}
+
+
+
+.main  h2 {
+    text-align: center;
+    height: 3vw auto;
+    width: 3vw auto;
+    border: none;
+    outline: none;
+    max-width: 100px auto;
+}
+
+.center {
+    background-color: #1e9ff5;
+    display: flex;
+    padding: 50px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+
+
