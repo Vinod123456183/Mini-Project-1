@@ -1,0 +1,94 @@
+@import "Colors";
+
+.contact {
+    width: 100%;
+    height: 100vh;
+    // background-color: $second;
+    // background-color: wheat; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    > main {
+        
+        // going inside any div go in that div and increse height in rem like 35 and width in %
+        
+        height: 31rem;
+        width: 80%;
+        padding: 3rem;
+        border-radius:0 200px 200px 0 ;
+        background-color: $third;
+        // background-color: rgb(26, 91, 91);
+
+        >h1 {
+            // background-color: rebeccapurple;
+            width: 68%;
+            height: 1px;
+            // display: flex;   
+            // align-items: center;
+            text-align:center;
+            // justify-self: flex-end;
+        }
+
+        > form {
+            margin: 5rem;
+            background-color: chartreuse;
+            border-radius: 200px 0px 200px 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            
+            > div{
+                // background-color: chartreuse;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                margin: 1rem;
+                // background-color: sienna;
+                width: 60%;
+                height: 3rem;
+                margin: 0.5rem;
+
+                > label {
+                    font: 100 1.3rem $text1;
+                    width: 20%;
+                    border-radius: .7rem;
+                    // background-color: skyblue;
+                    margin: 0 1rem;
+                    padding: 1rem;
+
+
+                }
+                > input {
+                    // background-color:firebrick;
+                    width: 80%;
+                    padding: 1rem;
+                    border-radius: 5px;
+                    outline: none;
+                    border: 1px solid rgba(123 , 123 , 132 , 0.6);
+                    
+                }
+
+            }
+
+            >button {
+                margin: 1rem;
+                padding: 0.7rem;
+                border:none;
+                width: 20%;
+                border-radius: 5px;
+                background-color: $third;
+                &:hover{
+                    // background-color: $second;
+                    // color: white;
+                    opacity: .5;
+                }
+            }
+
+        } 
+    }
+
+
+}
