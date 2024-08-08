@@ -1,0 +1,147 @@
+.footer {
+
+    // background-color: red;
+    // color: rgb(244, 78, 78);
+    height: auto;
+    padding: 40px 20px;
+    .footer-bottom{
+        // background-color: darkblue;
+        padding-bottom: 5rem;
+        height: 30vh;
+        padding-top: 2rem;
+
+        >span{
+            // background-color: goldenrod;
+            font-size: 2.7rem;
+            font-weight: 600;
+            padding: 1rem;
+        }
+    }
+  }
+  
+  .footer-columns {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    // background-color: #f8f800;
+    color: black;
+    padding-top: 2rem;
+    
+  }
+  
+  .footer-column {
+
+    // background-color: green;
+    flex: 1;
+    margin: 0 10px;
+
+    >h1{
+        // background-color: #fff;
+        padding: .2rem;
+        padding-left: 1rem;
+    }
+    >p{
+        // background-color: grey;
+        padding-top: 3px;
+        line-height: 1rem;
+        padding: .3rem;
+        padding-left: 1rem;
+    }
+  }
+  
+  .footer-column h3 {
+    font-size: 16px;
+    // padding: 1rem;
+    padding-left:1rem ;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    margin-bottom: 1px;
+  }
+  
+  .footer-column ul {
+    list-style-type: none;
+    padding: 0;
+
+    // background-color: hotpink;
+  }
+  
+  .footer-column ul li {
+    margin-bottom: 8px;
+    // background-color: goldenrod;
+    padding: 0 1rem;
+  }
+  
+  .footer-column ul li a {
+    text-decoration: none;
+    transition: color .13s ease;
+    font-size: .8rem;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    font-size: .9rem;
+    padding: 0 .3rem;
+    border-radius: 3px;
+    transition: all 0.3s ease; 
+  }
+  
+  .footer-column ul li a:hover {
+    color: rgb(0, 0, 0);
+    font-size: 1.6rem;
+    padding: 0 1rem;
+
+  }
+  
+  .footer-bottom {
+
+    margin-top: 20px;
+    text-align: center;
+    span {
+        // font-size: 24px;
+        margin-bottom: 10px;
+        // background-color: red;
+    }
+    
+  }
+
+  
+  .footer-bottom button {
+    padding: 9px 13px;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: rgb(0, 0, 0);
+    font-weight: 600;
+    word-spacing: 0.01rem;
+    background-color: rgb(255, 253, 253);
+    border-radius: 20px;
+    transition: all 0.3s ease; /* Smooth transition for all properties over 0.29s */
+  
+    &:hover {
+      // padding: 12px 15px; /* Adjust padding on hover for a subtle size change */
+      font-size: 20px; /* Increase font size on hover */
+      padding-left:  1rem  ;
+      background-color: rgb(255, 255, 255); /* Change background color on hover */
+    }
+  
+    > a {
+      color: inherit; /* Inherit color from parent button */
+      text-decoration: none; /* Remove underline from anchor */
+      background-color: transparent; /* Remove background color from anchor */
+      padding: 9px 13px; /* Apply padding to anchor */
+      border-radius: 20px; /* Apply border radius to anchor */
+      // transition: inherit; /* Inherit transition from parent button */
+    }
+  }
+  
+
+  .end{
+    // background-color: hotpink;
+    font-size: 1rem;
+    height: 3rem;
+    display: flex;
+    // text-align:center;
+    align-items: center;
+    justify-content: end;
+    padding-right: 5rem ;
+
+    
+  }

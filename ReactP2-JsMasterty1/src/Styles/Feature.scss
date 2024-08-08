@@ -1,0 +1,113 @@
+/* ThreeColumnLayout.css */
+
+.container {
+    display: flex;
+    // flex-wrap: wrap;
+    
+    // background-color: blue;
+    width: 100%;
+    padding: 0 1rem;
+    
+    // margin: 0 1rem;
+
+    min-height: 60vh;
+    // background-color: red;
+}
+
+.column {
+    // background-color: rgb(255, 0, 0);
+    width: calc(110% / 3);
+    
+    // padding: 10px;
+    display: flex;
+    // justify-content: flex-start;
+    // height: auto;
+    flex-direction: column;
+    // padding-top:5rem ;
+    // box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    >span{
+        // background-color: hotpink;
+        // background-color: greenyellow;
+        line-height: 2rem;
+        // word-spacing: .2rem;
+        font-weight: 200;
+        // text-overflow: initial;
+        padding: 0 1rem;
+        // margin: 0 2rem;
+        text-align: start;
+        width : 100%;
+
+        >p{
+            // padding:0 2rem;
+            font-size: 1.1rem;
+            padding: 2 1rem;
+            margin-top: 1rem;
+            width: 100%;
+        }
+    }
+    >p{
+        // background-color: yellow;
+        text-align: start;
+        padding: 0 1rem;
+        // padding-top: 2rem;
+        line-height: 1.2rem;
+        // background-color:navy ;
+        text-align: start;
+        font-size: .8rem;
+
+    }
+    >h4{
+        // background-color: teal;
+        font-size: 1.1rem;
+        // color: whitesmoke;
+        text-align: start;
+
+        width: 70%;
+        padding-left: .81rem;
+        padding-top: .3rem;
+        margin: .31rem;
+
+        font-weight: 600;
+    }
+
+
+
+
+
+}
+
+span {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+}
+
+p {
+    font-size: 14px;
+    line-height: 1.6;
+    // color: #555;
+    background-color: black;
+    color: white;
+}
+
+h4 {
+    font-size: 18px;
+    margin-bottom: 4rem;
+
+    // height: ;
+    text-align: center;
+    margin-left:  3rem;
+}
+
+
