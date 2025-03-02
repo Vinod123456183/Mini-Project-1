@@ -1,0 +1,29 @@
+/* src/styles.css or your component's CSS file */
+.icon-size {
+    font-size: 24px; /* Default size for smaller screens */
+  }
+  
+  @media (min-width: 640px) { /* sm */
+    .icon-size {
+      font-size: 20px;
+    }
+  }
+  
+  @media (min-width: 768px) { /* md */
+    .icon-size {
+      font-size: 24px;
+    }
+  }
+  
+  @media (min-width: 1024px) { /* lg */
+    .icon-size {
+      font-size: 27px;
+    }
+  }
+  
+  @media (min-width: 1280px) { /* xl */
+    .icon-size {
+      font-size: 29px;
+    }
+  }
+  
