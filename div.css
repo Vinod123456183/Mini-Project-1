@@ -1,0 +1,257 @@
+h2 , p{
+    font-family: 'Dancing Script', cursive;
+    font-family: 'Noto Sans', sans-serif;
+font-family: 'Open Sans', sans-serif;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* background-color: rgb(255, 240, 240); */
+}
+
+.carousel-item{
+    height: 90vh auto;
+    width: 97 auto;
+}
+
+p{
+    font-size: 26px;
+    padding-left: 20px;
+}
+
+.row{
+    margin-left: 20px;
+    margin-bottom: 16px;
+}
+
+.Pictures{
+    background-color: rgb(215, 179, 250);
+
+}
+
+.card-body_1{
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px auto;
+    font-weight: 400;
+
+}
+.card-body_1 .card-title{
+    color: black;
+}
+.btn{
+    background-color:rgb(111, 111, 255)   
+}
+.card-body_1 .btn:hover{
+    animation-duration:.5ms;
+    background-color:black;
+    color: white;
+    animation-duration: .4s;
+    box-shadow: inset 150px 0 0 0 #fff;
+    color: black;
+    transition: color .3s ease-in-out, box-shadow .3s ease-in-out; /*Smoth hota h*/
+}
+ /* .o:hover{
+    margin: 50px auto;
+    shape-margin:10px;
+    background-repeat: no-repeat;
+    animation-duration: 1s;
+    transition-duration: .4s;
+    color: rgb(196, 128, 128);
+}
+
+ .oo:hover{
+    margin-top: 50px;
+    shape-margin:10px;
+    background-repeat: no-repeat;
+    animation-duration: 1s;
+    transition-duration: .4s;
+    color: rgb(196, 128, 128);
+}
+
+ .ooo:hover{
+    margin: 50px auto;
+    shape-margin:10px;
+    background-repeat: no-repeat;
+    animation-duration: 1s;
+    transition-duration: .4s;
+    color: rgb(196, 128, 128);
+} */
+
+.card-body_2{
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+}
+.card-body_3{
+    padding: 10px;
+    text-align: center;
+    align-items: center;
+    
+}
+.row .card .vinod{
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    align-items: center;
+}
+.card .vinod{
+    margin :auto;
+    justify-content: center;
+    margin-top:20px;
+}
+
+.o .card-body_1 .mee11 .whats{
+    color: green;
+    
+}
+    .card .prashant{
+        margin :auto;
+        justify-content: center;
+        margin-top:20px;
+    }
+
+    .row .card .prashant{
+        border-radius: 50%;
+        height: 150px;
+        width: 150px;
+        align-items: center;
+    }
+    .card .uttkarsh{
+        margin :auto;
+        justify-content: center;
+        margin-top:20px;
+    }
+
+    .row .card .uttkarsh{
+        border-radius: 50%;
+        height: 150px;
+        width: 150px;
+        align-items: center;
+    }
+
+
+.first_img{
+    font-size:100%;
+}
+
+
+
+.ce{
+    align-items: center;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+
+ /* .fdiv{
+    align-items: center;
+    font-size: 20px;
+}
+.float-end{
+    color: black;
+    background-color: rgb(151, 151, 226);
+    margin: 10px;
+    padding: 6px;
+    border-radius: 10px;
+    transform: translate(-10px,100px);
+}
+.float-end:hover{
+    background-color: white;
+    color:black;
+} */
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 4px;
+  }
+  
+  /* Create four equal columns that sits next to each other */
+  .column {
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+  }
+  
+  .column img {
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
+  }
+  
+  /* Responsive layout - makes a two column-layout instead of four columns */
+  @media screen and (max-width: 800px) {
+    .column {
+      flex: 50%;
+      max-width: 50%;
+    }
+  }
+  
+  /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 600px) {
+    .column {
+      flex: 100%;
+      max-width: 100%;
+    }
+  }
+
+  a{
+    color:whitesmoke;
+  }
+
+.whats{
+  /* background-color: gray; */
+  display: inline-flex;
+  justify-content: center;
+  background-color: #25D366;
+font-size: 32px;
+padding: 1.5px;
+border-radius: 50%;
+margin: 10px 14px;
+justify-content: center;
+align-items: center;
+}
+
+.call{
+      display: inline-flex;
+      justify-content: center;
+      background-color: #25D366;
+      font-size: 32px;
+      padding: 1.5px;
+      border-radius: 50%;
+      margin: 1px 1px;
+      justify-content: center;
+      align-items: center;
+      
+    }
+    
+    .linkd{
+        display: inline-flex;
+        justify-content: center;
+        font-size: 32px;
+        padding: 1.4px;
+        border-radius: 50%;
+        margin: 1px 1px;
+        justify-content: center;
+        align-items: center;
+        background-color: #0077B5;
+        
+}
+
+
+
+.button1{
+    background-color: aqua;
+    color: black;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+
+*{
+    color: whitesmoke;
+background-color: black;
+}
