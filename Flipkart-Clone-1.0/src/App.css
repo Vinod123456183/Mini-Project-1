@@ -1,0 +1,58 @@
+/* App.css */
+
+/* Media Queries for responsive layout */
+@media (max-width: 768px) {
+  .desktopComponent {
+    display: none;
+  }
+  .mobileComponent {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .desktopComponent {
+    display: block;
+  }
+  .mobileComponent {
+    display: none;
+  }
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent horizontal scrolling */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;  /* Disable horizontal scrolling */
+  overflow-y: auto;    /* Allow vertical scrolling only */
+}
+
+/* Ensure consistent box sizing across all elements */
+* {
+  box-sizing: border-box;  /* Prevent padding/border from affecting element width */
+}
+
+/* Optional: Apply the following to prevent any specific element from causing horizontal scrolling */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Full height for HTML */
+html {
+  height: 100%;
+}
+
+/* Prevent body content from stretching outside the viewport */
+body {
+  overflow-x: hidden;  /* Prevent unwanted horizontal scrolling */
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
