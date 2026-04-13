@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recipe</title>
+    <!-- Add Tailwind CSS CDN link -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            background-color: #efefef;
+        }
+    </style>
+</head>
+<body >
+
+    <div class="flex p-3 items-center bg-gray-100 justify-between px-6 lg:px-10">
+        <div><p class="font-bold text-md lg:text-xl   text-red-500"><a href="/">Food<span class="text-black">King</span</a></p></div>
+        <div class="flex text-xs lg:text-lg  items-center gap-3 lg:gap-5">
+            <p class="hover:text-blue-500"><a href="/">Home</a></p>
+            <p class="hover:text-blue-500"><a href="/recipies">Recipies</a></p>
+            <p class="hover:text-blue-500"><a href="/add">Add</a></p>
+        </div>
+    </div>
+
+    
+    
+    <div class="  py-10 my-5 max-w-xl mx-auto  bg-gray-100 p-8 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold text-center text-gray-600 mb-4">Add a New Recipe</h2>
+        <form action="/add-recipe" method="POST" class= " space-y-2">
+            <div>
+                <label for="name" class="block text-md font-medium text-gray-700">Recipe Name:</label>
+                <input type="text" id="name" name="name" required class="w-full p-2 m-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+
+            <div>
+                <label for="imageUrl" class="block text-md font-medium text-gray-700">Image URL:</label>
+                <input type="url" id="imageUrl" name="imageUrl" required class="w-full p-2 m-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+
+            <div>
+                <label for="duration" class="block text-md font-medium text-gray-700">Duration (in minutes):</label>
+                <input type="number" id="duration" name="duration" required class="w-full p-2 m-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+
+            <div>
+                <label for="calories" class="block text-md font-medium text-gray-700">Calories:</label>
+                <input type="number" id="calories" name="calories" required class="w-full p-2 m-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+            </div>
+
+            <div>
+                <label for="ingredients" class="block text-md font-medium text-gray-700">Ingredients (comma-separated):</label>
+                <textarea id="ingredients" name="ingredients" required class="w-full p-2 m-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+            </div>
+
+            <div>
+                <button type="submit" class="w-full py-3 bg-green-500 text-white font-semibold rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">Add Recipe</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+
+            Recipe Name: sd
+            Image URL: https://imgs.search.brave.com/jdpvQZNAwDvODefffo0cRfY3tmLN2gGHWGq5Mg3xGNA/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly93d3cu/aW1nYWNhZGVteS5j/b20vc2l0ZXMvZGVm/YXVsdC9maWxlcy9p/bWctYWNhZGVteS1v/cmdhbml6YXRpb24t/c2NoZW1hLmpwZw
+            Duration: 50 minutes
+            Calories: 500
+            Ingredients: as,asas,as,asdasdasd,asdeas,asdsad
+                

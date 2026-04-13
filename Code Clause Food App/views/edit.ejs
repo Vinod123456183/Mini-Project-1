@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Recipe - <%= recipe.name %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            background-color: #efefef;
+        }
+    </style>
+</head>
+<body class="">
+
+
+    <div class="flex p-3 items-center bg-gray-100 justify-between px-6 lg:px-10">
+        <div><p class="font-bold text-md lg:text-xl   text-red-500"><a href="/">Food<span class="text-black">King</span</a></p></div>
+        <div class="flex text-xs lg:text-lg  items-center gap-3 lg:gap-5">
+            <p class="hover:text-blue-500"><a href="/">Home</a></p>
+            <p class="hover:text-blue-500"><a href="/recipies">Recipies</a></p>
+            <p class="hover:text-blue-500"><a href="/add">Add</a></p>
+        </div>
+    </div>
+
+    
+<div class="bg-gray-100 flex justify-center items-center h-screen">
+
+    <div class=" bg-white p-6 rounded-lg shadow-sm max-w-md w-full">
+        <h2 class="text-xl font-semibold text-center text-gray-800 mb-4">Edit Recipe</h2>
+        
+        <form action="/update-recipe" method="POST">
+            <input type="hidden" name="oldName" value="<%= recipe.name %>">
+            
+            <!-- Recipe Name -->
+            <div class="mb-3">
+                <label class="block text-sm text-gray-700 font-semibold mb-1" for="name">Recipe Name</label>
+                <input type="text" name="name" value="<%= recipe.name %>" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" required>
+            </div>
+            
+            <!-- Image URL -->
+            <div class="mb-3">
+                <label class="block text-sm text-gray-700 font-semibold mb-1" for="imageUrl">Image URL</label>
+                <input type="text" name="imageUrl" value="<%= recipe.imageUrl %>" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" required>
+            </div>
+
+            <!-- Duration -->
+            <div class="mb-3">
+                <label class="block text-sm text-gray-700 font-semibold mb-1" for="duration">Duration (Minutes)</label>
+                <input type="number" name="duration" value="<%= recipe.duration %>" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" required>
+            </div>
+
+            <!-- Calories -->
+            <div class="mb-3">
+                <label class="block text-sm text-gray-700 font-semibold mb-1" for="calories">Calories</label>
+                <input type="number" name="calories" value="<%= recipe.calories %>" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" required>
+            </div>
+
+            <!-- Ingredients -->
+            <div class="mb-3">
+                <label class="block text-sm text-gray-700 font-semibold mb-1" for="ingredients">Ingredients (comma separated)</label>
+                <textarea name="ingredients" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" required><%= recipe.ingredients %></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-semibold hover:bg-blue-700 transition duration-200">
+                    Update Recipe
+                </button>
+            </div>
+        </form>
+    </div>
+    </div>
+
+</body>
+</html>
