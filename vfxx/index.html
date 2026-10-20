@@ -1,0 +1,1366 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Calendar Report – paste raw news, get the full picture</title>
+    <style>
+      :root {
+        --bg: #f6f7f9;
+        --card: #fff;
+        --ink: #14181f;
+        --mute: #667085;
+        --line: #e3e6eb;
+        --hi: #d92d20;
+        --md: #e08a00;
+        --lo: #8a94a6;
+        --up: #0b8a4b;
+        --dn: #d92d20;
+        --acc: #1f4fd8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1318;
+          --card: #171c23;
+          --ink: #e8ebf0;
+          --mute: #98a2b3;
+          --line: #262d37;
+          --hi: #ff6b5e;
+          --md: #f5a623;
+          --lo: #7d8799;
+          --up: #3ccf86;
+          --dn: #ff6b5e;
+          --acc: #7da2ff;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          15px/1.5 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 20px 16px 60px;
+      }
+      h1 {
+        font-size: 26px;
+        margin: 0 0 4px;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: 17px;
+        margin: 26px 0 10px;
+      }
+      p.sub {
+        color: var(--mute);
+        margin: 0 0 16px;
+      }
+      textarea {
+        width: 100%;
+        height: 150px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card);
+        color: var(--ink);
+        font:
+          13px/1.4 ui-monospace,
+          Menlo,
+          Consolas,
+          monospace;
+        resize: vertical;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+        color: var(--ink);
+      }
+      button {
+        border: 1px solid var(--line);
+        background: var(--card);
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      button.primary {
+        background: var(--acc);
+        border-color: var(--acc);
+        color: #fff;
+        font-weight: 600;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible {
+        outline: 2px solid var(--acc);
+        outline-offset: 2px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-top: 10px;
+      }
+      .row label {
+        color: var(--mute);
+        font-size: 13px;
+      }
+      input,
+      select {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 7px 10px;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+      }
+      .stat {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .stat b {
+        display: block;
+        font-size: 24px;
+        line-height: 1.2;
+      }
+      .stat span {
+        color: var(--mute);
+        font-size: 13px;
+      }
+      .cols {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 14px;
+      }
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px 14px;
+      }
+      .panel h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+      .item {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+        padding: 6px 0;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .item:first-of-type {
+        border-top: 0;
+      }
+      .item .when {
+        color: var(--mute);
+        font-size: 12px;
+        min-width: 92px;
+      }
+      .empty {
+        color: var(--mute);
+        font-size: 14px;
+      }
+      .tablebox {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 900px;
+        font-size: 14px;
+      }
+      th {
+        text-align: left;
+        font-weight: 600;
+        color: var(--mute);
+        font-size: 12px;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--line);
+        position: sticky;
+        top: 0;
+        background: var(--card);
+      }
+      td {
+        padding: 7px 10px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      tr.day td {
+        background: var(--bg);
+        font-weight: 700;
+        padding: 9px 10px;
+      }
+      tr.day.today td {
+        color: var(--acc);
+      }
+      .cur {
+        font-weight: 700;
+      }
+      .bars {
+        display: inline-flex;
+        gap: 2px;
+        vertical-align: middle;
+        margin-right: 6px;
+      }
+      .bars i {
+        width: 5px;
+        height: 12px;
+        border-radius: 1px;
+        background: var(--line);
+      }
+      .imp3 .bars i {
+        background: var(--hi);
+      }
+      .imp2 .bars i:nth-child(-n + 2) {
+        background: var(--md);
+      }
+      .imp1 .bars i:nth-child(1) {
+        background: var(--lo);
+      }
+      .chip {
+        display: inline-block;
+        padding: 1px 8px;
+        border-radius: 99px;
+        font-size: 12px;
+        border: 1px solid var(--line);
+        color: var(--mute);
+        white-space: nowrap;
+      }
+      .chip.k {
+        color: var(--ink);
+        border-color: var(--ink);
+      }
+      .num {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .up {
+        color: var(--up);
+        font-weight: 600;
+      }
+      .dn {
+        color: var(--dn);
+        font-weight: 600;
+      }
+      .flat {
+        color: var(--mute);
+      }
+      .st {
+        font-size: 12px;
+        color: var(--mute);
+      }
+      .st.rel {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .note {
+        color: var(--mute);
+        font-size: 13px;
+        margin-top: 8px;
+      }
+      .hidden {
+        display: none;
+      }
+      @media print {
+        textarea,
+        .row,
+        #input {
+          display: none;
+        }
+      }
+
+      body {
+        background:
+          radial-gradient(
+            900px 320px at 50% -120px,
+            color-mix(in srgb, var(--acc) 16%, transparent),
+            transparent
+          ),
+          var(--bg);
+      }
+      h1 {
+        font-size: 32px;
+        font-weight: 800;
+      }
+      h2 {
+        font-size: 19px;
+        margin: 30px 0 12px;
+      }
+      textarea {
+        border-radius: 12px;
+      }
+      button {
+        transition:
+          background 0.12s,
+          border-color 0.12s,
+          transform 0.12s;
+      }
+      button:hover {
+        border-color: var(--acc);
+      }
+      button.primary:hover {
+        filter: brightness(1.08);
+      }
+      .stats {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+      }
+      .stat {
+        position: relative;
+        text-align: left;
+        border-radius: 12px;
+        padding: 12px 14px 12px 18px;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+        color: var(--ink);
+      }
+      .stat::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: var(--lo);
+      }
+      .stat b {
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      button.stat {
+        cursor: pointer;
+      }
+      button.stat:hover {
+        transform: translateY(-2px);
+        border-color: var(--acc);
+      }
+      button.stat.on {
+        border-color: var(--acc);
+        box-shadow: 0 0 0 2px var(--acc);
+      }
+      .stat[data-set="released"]::before {
+        background: var(--up);
+      }
+      .stat[data-set="upcoming"]::before {
+        background: var(--acc);
+      }
+      .stat[data-set="high impact"]::before {
+        background: var(--hi);
+      }
+      .stat[data-set="CPI events"]::before {
+        background: #8b5cf6;
+      }
+      .stat[data-set="PPI / price events"]::before {
+        background: var(--md);
+      }
+      .stat[data-set="speeches"]::before {
+        background: #0ea5a5;
+      }
+      .stat-hint {
+        color: var(--mute);
+        font-size: 13px;
+        margin: 8px 2px 0;
+      }
+      .panel {
+        border-radius: 12px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+      }
+      .panel h3 {
+        font-size: 16px;
+      }
+      .bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin: 0 0 10px;
+      }
+      .seg {
+        display: inline-flex;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--card);
+      }
+      .seg button {
+        border: 0;
+        border-right: 1px solid var(--line);
+        border-radius: 0;
+        background: transparent;
+        padding: 8px 16px;
+      }
+      .seg button:last-child {
+        border-right: 0;
+      }
+      .seg button.on {
+        background: var(--acc);
+        color: #fff;
+        font-weight: 600;
+      }
+      .tablebox {
+        border-radius: 12px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+        max-height: 75vh;
+        overflow: auto;
+      }
+      th {
+        z-index: 2;
+      }
+      tbody tr:not(.day):hover td {
+        background: color-mix(in srgb, var(--acc) 7%, transparent);
+      }
+      tr.day td {
+        position: sticky;
+        top: 33px;
+        z-index: 1;
+        font-size: 14px;
+      }
+      .cur {
+        color: var(--acc);
+      }
+      .imp3 {
+        color: var(--hi);
+        font-weight: 600;
+      }
+      .imp2 {
+        color: var(--md);
+        font-weight: 600;
+      }
+      .imp1 {
+        color: var(--mute);
+      }
+      .chip {
+        background: color-mix(in srgb, var(--line) 40%, transparent);
+      }
+      .chip.k {
+        background: color-mix(in srgb, var(--acc) 14%, transparent);
+        border-color: var(--acc);
+        color: var(--acc);
+        font-weight: 600;
+      }
+      .row label {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      /* ---- layout fixes: no overflow ---- */
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      .wrap {
+        width: 100%;
+        min-width: 0;
+      }
+      .stats {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+      }
+      .cols {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+      }
+      .panel,
+      .stat {
+        min-width: 0;
+      }
+      .item {
+        min-width: 0;
+      }
+      .item .when {
+        flex: none;
+      }
+      .item > span:last-child {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .row input[type="search"] {
+        flex: 1 1 180px;
+        min-width: 0;
+      }
+      .row select,
+      .row input {
+        max-width: 100%;
+        min-width: 0;
+      }
+      .seg {
+        max-width: 100%;
+        overflow-x: auto;
+      }
+      .seg button {
+        white-space: nowrap;
+        flex: none;
+      }
+      .tablebox {
+        max-width: 100%;
+      }
+      table {
+        min-width: 820px;
+      }
+      @media (max-width: 820px) {
+        h1 {
+          font-size: 26px;
+        }
+        .stat b {
+          font-size: 24px;
+        }
+        .tablebox {
+          max-height: none;
+          overflow: visible;
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+        }
+        table,
+        tbody {
+          display: block;
+          min-width: 0;
+          width: 100%;
+        }
+        thead {
+          display: none;
+        }
+        tr {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4px 12px;
+          background: var(--card);
+          border: 1px solid var(--line);
+          border-radius: 12px;
+          padding: 10px 12px;
+          margin-bottom: 10px;
+        }
+        tr.day {
+          display: block;
+          background: transparent;
+          border: 0;
+          padding: 0;
+          margin: 16px 0 8px;
+        }
+        tr.day td {
+          position: static;
+          background: transparent;
+          padding: 0;
+          display: block;
+          border: 0;
+        }
+        td {
+          display: block;
+          border: 0;
+          padding: 2px 0;
+          min-width: 0;
+        }
+        td[data-l]::before {
+          content: attr(data-l);
+          display: block;
+          color: var(--mute);
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+        }
+        td.ev {
+          grid-column: 1/-1;
+          font-weight: 600;
+          font-size: 15px;
+        }
+        td.ev::before {
+          display: none;
+        }
+        td[colspan] {
+          grid-column: 1/-1;
+        }
+        tbody tr:not(.day):hover td {
+          background: transparent;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Calendar report</h1>
+      <p class="sub">
+        Paste the raw text of an economic calendar page, then press Analyze.
+        Everything runs in your browser; nothing is uploaded.
+      </p>
+
+      <h2>All events</h2>
+      <div class="bar">
+        <div class="seg" role="group" aria-label="When">
+          <button data-when="">All</button
+          ><button data-when="Previous">Previous</button
+          ><button data-when="Today">Today</button
+          ><button data-when="Week">Next 7 days</button
+          ><button data-when="Upcoming">Upcoming</button>
+        </div>
+      </div>
+      <div class="row" style="margin: 0 0 10px">
+        <input
+          id="q"
+          type="search"
+          placeholder="Search event…"
+          aria-label="Search"
+        />
+        <select id="fc" aria-label="Currency">
+          <option value="">All currencies</option>
+        </select>
+        <select id="ft" aria-label="Type">
+          <option value="">All types</option>
+        </select>
+        <select id="fi" aria-label="Impact">
+          <option value="">All impact</option>
+          <option value="3">High</option>
+          <option value="2">Medium and up</option>
+          <option value="1">Low</option>
+        </select>
+        <label>From date <input type="date" id="fa" /></label
+        ><label>To date <input type="date" id="fb" /></label>
+        <button id="reset">Reset filters</button>
+        <button id="csv">Download CSV</button>
+        <button id="print">Print</button>
+      </div>
+      <div class="tablebox" id="tbl">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Cur</th>
+              <th>Event</th>
+              <th>Impact</th>
+              <th>Type</th>
+              <th>Actual</th>
+              <th>Forecast</th>
+              <th>Previous</th>
+              <th>Result</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+
+      <section id="input">
+        <textarea
+          id="raw"
+          placeholder="Paste the whole page text here (Ctrl+V)…"
+          aria-label="Raw calendar text"
+        ></textarea>
+        <div class="row">
+          <button class="primary" id="go">Analyze</button>
+          <button id="sample">Load small sample</button>
+          <button id="clear">Clear</button>
+          <label>Today is <input type="date" id="ref" /></label>
+        </div>
+        <div class="note">
+          Impact strength is inferred from the event name (pasted text has no
+          red/orange/yellow icons). Times are shown exactly as in the pasted
+          page’s time zone.
+        </div>
+      </section>
+
+      <div id="out" class="hidden">
+        <h2>Summary</h2>
+        <div class="stats" id="stats"></div>
+        <div class="stat-hint">
+          Tip: click any number above to filter the table below.
+        </div>
+
+        <div class="cols" style="margin-top: 14px">
+          <div class="panel">
+            <h3>Next up (high and medium impact)</h3>
+            <div id="next"></div>
+          </div>
+          <div class="panel">
+            <h3>Biggest surprises (actual vs forecast)</h3>
+            <div id="surp"></div>
+          </div>
+          <div class="panel">
+            <h3>Currency bias from released data</h3>
+            <div id="bias"></div>
+          </div>
+          <div class="panel">
+            <h3>Inflation news (CPI, PPI and similar)</h3>
+            <div id="infl"></div>
+          </div>
+        </div>
+
+        <div class="note" id="count"></div>
+      </div>
+    </div>
+
+    <script>
+      const $ = (s) => document.querySelector(s);
+      const MON = {
+        Jan: 0,
+        Feb: 1,
+        Mar: 2,
+        Apr: 3,
+        May: 4,
+        Jun: 5,
+        Jul: 6,
+        Aug: 7,
+        Sep: 8,
+        Oct: 9,
+        Nov: 10,
+        Dec: 11,
+      };
+      const CCY = /^(USD|EUR|GBP|JPY|AUD|NZD|CAD|CHF|CNY|All)$/;
+      const DOW = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$/;
+      const DATE = /^([A-Z][a-z]{2}) (\d{1,2})$/;
+      const TIME = /^(\d{1,2}):(\d{2})(am|pm)$/i;
+      const SPECIAL =
+        /^(All Day|Tentative|Day \d+|\d+(st|nd|rd|th)-\d+(st|nd|rd|th)|[A-Z][a-z]{2} \d+(st|nd|rd|th))$/;
+      const KEY =
+        /Fed Chairman|Chair|Lagarde|Bailey|Ueda|Macklem|Trump|Powell|Warsh|Schlegel/;
+
+      /* [pattern, type, category, impact 1-3] — first match wins */
+      const RULES = [
+        [/holiday/i, "Bank holiday", "Holiday", 1],
+        [/Daylight/i, "Clock change", "Other", 1],
+        [
+          /Federal Funds Rate|Official Cash Rate|Main Refinancing Rate|Overnight Rate|BOJ Policy Rate|Bank Rate/i,
+          "Rate decision",
+          "Central bank",
+          3,
+        ],
+        [/Loan Prime Rate/i, "Rate decision", "Central bank", 2],
+        [
+          /FOMC Statement|Rate Statement|Monetary Policy Statement|Monetary Policy Report|Outlook Report|Press Conference/i,
+          "Central bank event",
+          "Central bank",
+          3,
+        ],
+        [
+          /Minutes|Meeting Accounts|Beige Book|Summary of (Opinions|Monetary)|Credit Conditions/i,
+          "Minutes / report",
+          "Central bank",
+          2,
+        ],
+        [/Speaks/i, "Speech", "Central bank", 1],
+        [/ISM/i, "ISM", "Growth", 3],
+        [/\bCPI\b|PCE/i, "CPI", "Inflation", 3],
+        [
+          /\bRPI\b|Inflation (Gauge|Expectations)|Employment Cost/i,
+          "Inflation other",
+          "Inflation",
+          2,
+        ],
+        [
+          /\b(S?PPI|WPI|FPI|RMPI|IPPI)\b|Import Prices|Commodity Prices|Shop Price/i,
+          "PPI / prices",
+          "Inflation",
+          2,
+        ],
+        [/HPI|House Price|Home Price/i, "House prices", "Housing", 1],
+        [/Non-Farm/i, "NFP", "Jobs", 3],
+        [/Unemployment Claims/i, "Jobless claims", "Jobs", 2],
+        [
+          /Employment Change|Unemployment Rate|Average (Hourly )?Earnings|Cash Earnings|Claimant|Unemployment Change/i,
+          "Jobs",
+          "Jobs",
+          3,
+        ],
+        [
+          /Challenger|Job Advertisements|Job Cuts|Payrolls/i,
+          "Jobs (minor)",
+          "Jobs",
+          1,
+        ],
+        [/GDP/i, "GDP", "Growth", 3],
+        [
+          /Retail Sales|Consumer Spending|Household Spending/i,
+          "Retail sales",
+          "Growth",
+          3,
+        ],
+        [/PMI/i, "PMI", "Growth", 2],
+        [
+          /Industrial Production|Factory Orders|Durable|Manufacturing Production|Machinery|Construction Output|Manufacturing Sales|Wholesale|Inventories|Tertiary|Index of Services|Capacity|Fixed Asset|Vehicle/i,
+          "Output / orders",
+          "Growth",
+          2,
+        ],
+        [/Trade Balance|Current Account/i, "Trade", "Trade", 2],
+        [
+          /Housing|Building (Permits|Consents)|Home Sales|New Home|NAHB|Mortgage/i,
+          "Housing data",
+          "Housing",
+          2,
+        ],
+        [
+          /Confidence|Sentiment|ZEW|ifo|Sentix|Tankan|Optimism|Climate|NFIB|Empire|Philly|Richmond|Chicago|Economy Watchers|Barometer|Expectations|Ivey|Leading/i,
+          "Sentiment survey",
+          "Sentiment",
+          2,
+        ],
+        [/Auction/i, "Bond auction", "Markets", 1],
+        [/Crude|Natural Gas|API Weekly/i, "Energy stocks", "Energy", 1],
+        [
+          /IMF|OPEC|Eurogroup|ECOFIN|Summit|Autumn Forecast|Annual Report|Financial Stability/i,
+          "Meeting",
+          "Other",
+          1,
+        ],
+        [
+          /M2|M3|M4|Loans|Lending|Credit|Monetary Base|Securities|TIC|Budget|Borrowing|Reserves|Money/i,
+          "Money / credit",
+          "Money",
+          1,
+        ],
+        [/GDT/i, "Dairy auction", "Markets", 1],
+      ];
+      const MINOR =
+        /Spanish|Italian|French|Final|Revised|Weekly|Prelim Machine|Construction PMI|Lloyds|Nationwide|Rightmove|Belgian|Mortgage Approvals/;
+      const INVERSE =
+        /Unemployment|Claims|Job Cuts|Claimant|Budget Balance|Borrowing/i;
+
+      function classify(ev) {
+        let r = RULES.find((x) => x[0].test(ev.name)) || [
+          0,
+          "Other",
+          "Other",
+          1,
+        ];
+        let imp = r[3];
+        if (r[1] === "Speech" && KEY.test(ev.name)) imp = 3;
+        if (r[1] === "CPI" && /Final/.test(ev.name)) imp = 2;
+        else if (imp > 1 && MINOR.test(ev.name) && r[1] !== "Rate decision")
+          imp = Math.max(1, imp - 1);
+        if (/Flash .*PMI/.test(ev.name) && !MINOR.test(ev.name)) imp = 3;
+        if (
+          r[1] === "Bond auction" &&
+          /^(USD)/.test(ev.ccy) &&
+          /10-y|30-y/.test(ev.name)
+        )
+          imp = 2;
+        ev.type = r[1];
+        ev.cat = r[2];
+        ev.imp = imp;
+      }
+      function num(s) {
+        if (!s || /\|/.test(s) || /^<?[A-Z]/.test(s)) return null;
+        const m = s.replace(/,/g, "").match(/^<?(-?\d+(\.\d+)?)\s*([KMBT%]?)/);
+        return m ? { v: parseFloat(m[1]), u: m[3] } : null;
+      }
+      function surprise(ev) {
+        const a = num(ev.actual),
+          f = num(ev.forecast);
+        if (!a || !f) return;
+        const d = a.v - f.v;
+        let strength;
+        if (d === 0) strength = 0;
+        else {
+          const rel = Math.abs(d) / Math.max(Math.abs(f.v), 1e-9);
+          if (a.u === "%" && Math.abs(f.v) < 15)
+            strength = Math.abs(d) >= 0.3 ? 3 : Math.abs(d) >= 0.1 ? 2 : 1;
+          else strength = rel >= 0.15 ? 3 : rel >= 0.05 ? 2 : 1;
+        }
+        const inv = INVERSE.test(ev.name);
+        ev.dir = d === 0 ? 0 : d > 0 !== inv ? 1 : -1;
+        ev.str = strength;
+        ev.diff = d;
+      }
+
+      function parse(text) {
+        const L = text.split(/\r?\n/);
+        const yr = (text.match(/This Month:\s*[A-Za-z]+\s*(20\d\d)/) ||
+          text.match(/(20\d\d)/) || [, new Date().getFullYear()])[1];
+        const evs = [];
+        let date = null,
+          time = "",
+          pend = null,
+          i = 0,
+          cur = null,
+          seq = 0;
+        const nextNB = (j) => {
+          while (j < L.length && !L[j].trim()) j++;
+          return j;
+        };
+        while (i < L.length) {
+          const raw = L[i],
+            t = raw.trim();
+          if (cur && cur.wait === 0 && /^More$/.test(t) && date) {
+            break;
+          }
+          if (!t) {
+            i++;
+            continue;
+          }
+          if (DOW.test(t)) {
+            const j = nextNB(i + 1),
+              m = j < L.length && L[j].trim().match(DATE);
+            if (m && m[1] in MON) {
+              date = new Date(+yr, MON[m[1]], +m[2]);
+              cur = null;
+              pend = null;
+              time = "";
+              i = j + 1;
+              continue;
+            }
+          }
+          if (date && TIME.test(t)) {
+            time = t.toLowerCase();
+            pend = null;
+            cur = null;
+            i++;
+            continue;
+          }
+          if (date && SPECIAL.test(t)) {
+            pend = t;
+            cur = null;
+            i++;
+            continue;
+          }
+          if (date && CCY.test(t)) {
+            const j = nextNB(i + 1);
+            if (j < L.length) {
+              cur = {
+                id: seq++,
+                date,
+                ccy: t,
+                name: L[j].trim(),
+                time: pend || time || "",
+                actual: "",
+                forecast: "",
+                previous: "",
+                has: false,
+                wait: 0,
+              };
+              pend = null;
+              evs.push(cur);
+              i = j + 1;
+              continue;
+            }
+          }
+          if (cur) {
+            if (raw.includes("\t")) {
+              const p = raw.split("\t"),
+                o = p[0].trim() === "" ? 1 : 0;
+              cur.actual = (p[o] || "").trim();
+              cur.forecast = (p[o + 1] || "").trim();
+              cur.previous = (p[o + 2] || "").trim();
+              cur.has = true;
+            } else {
+              const tk = t.split(/\s+/);
+              if (cur.has && tk.length === 1) cur.previous = t;
+              else if (tk.length === 3) {
+                cur.actual = tk[0];
+                cur.forecast = tk[1];
+                cur.previous = tk[2];
+                cur.has = true;
+              } else if (tk.length === 2) {
+                cur.forecast = tk[0];
+                cur.previous = tk[1];
+                cur.has = true;
+              } else if (tk.length === 1) {
+                cur.previous = t;
+                cur.has = true;
+              }
+            }
+          }
+          i++;
+        }
+        evs.forEach((e) => {
+          classify(e);
+          surprise(e);
+          e.min = minutes(e.time);
+        });
+        return evs;
+      }
+      function minutes(t) {
+        const m = t.match(TIME);
+        if (!m) return -1;
+        let h = +m[1] % 12;
+        if (m[3].toLowerCase() === "pm") h += 12;
+        return h * 60 + +m[2];
+      }
+      const key = (e) => e.date.getTime() + Math.max(e.min, -1) * 60000;
+      const fmtDate = (d) =>
+        d.toLocaleDateString("en-GB", {
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+      const iso = (d) =>
+        d.getFullYear() +
+        "-" +
+        String(d.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(d.getDate()).padStart(2, "0");
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+        );
+      const IMPL = { 3: "High", 2: "Medium", 1: "Low" };
+      let EV = [],
+        REF = null;
+
+      function status(e) {
+        if (e.actual) return "Released";
+        return e.date < REF ? "Past" : "Upcoming";
+      }
+      function bars(n) {
+        return `<span class="imp${n}"><span class="bars"><i></i><i></i><i></i></span>${IMPL[n]}</span>`;
+      }
+      function result(e) {
+        if (e.dir === undefined) return '<span class="flat">–</span>';
+        if (e.dir === 0) return '<span class="flat">In line</span>';
+        const w = ["", "slight", "moderate", "strong"][e.str];
+        const cls = e.dir > 0 ? "up" : "dn";
+        return `<span class="${cls}">${e.dir > 0 ? "▲ Better" : "▼ Worse"} (${w})</span>`;
+      }
+      function timeLabel(e) {
+        return e.time || "–";
+      }
+
+      function summarize() {
+        const rel = EV.filter((e) => e.actual),
+          up = EV.filter((e) => status(e) === "Upcoming");
+        const hi = EV.filter((e) => e.imp === 3);
+        const days = new Set(EV.map((e) => e.date.getTime())).size;
+        $("#stats").innerHTML = [
+          [EV.length, "events"],
+          [days, "days covered"],
+          [rel.length, "released"],
+          [up.length, "upcoming"],
+          [hi.length, "high impact"],
+          [EV.filter((e) => e.type === "CPI").length, "CPI events"],
+          [
+            EV.filter((e) => e.type === "PPI / prices").length,
+            "PPI / price events",
+          ],
+          [EV.filter((e) => e.type === "Speech").length, "speeches"],
+        ]
+          .map(([n, l]) => stat(n, l))
+          .join("");
+
+        const nx = up
+          .filter((e) => e.imp >= 2)
+          .sort((a, b) => key(a) - key(b) || b.imp - a.imp)
+          .slice(0, 10);
+        $("#next").innerHTML = nx.length
+          ? nx
+              .map(
+                (e) =>
+                  `<div class="item"><span class="when">${e.date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}, ${esc(timeLabel(e))}</span><span><b class="cur">${e.ccy}</b> ${esc(e.name)} ${bars(e.imp)}<br><span class="st">${e.type}${e.forecast ? " · forecast " + esc(e.forecast) : ""}${e.previous ? " · previous " + esc(e.previous) : ""}</span></span></div>`,
+              )
+              .join("")
+          : '<div class="empty">No upcoming medium or high impact events.</div>';
+
+        const sp = rel
+          .filter((e) => e.dir !== undefined && e.dir !== 0)
+          .sort((a, b) => b.str * 10 + b.imp - (a.str * 10 + a.imp))
+          .slice(0, 8);
+        $("#surp").innerHTML = sp.length
+          ? sp
+              .map(
+                (e) =>
+                  `<div class="item"><span class="when">${e.date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}, ${esc(timeLabel(e))}</span><span><b class="cur">${e.ccy}</b> ${esc(e.name)}<br><span class="num">${esc(e.actual)} vs ${esc(e.forecast)}</span> ${result(e)}</span></div>`,
+              )
+              .join("")
+          : '<div class="empty">No released data with forecasts yet.</div>';
+
+        const sc = {};
+        rel
+          .filter((e) => e.dir)
+          .forEach((e) => {
+            sc[e.ccy] = (sc[e.ccy] || 0) + e.dir * e.imp * e.str;
+          });
+        const bs = Object.entries(sc).sort((a, b) => b[1] - a[1]);
+        $("#bias").innerHTML = bs.length
+          ? bs
+              .map(
+                ([c, v]) =>
+                  `<div class="item"><b class="cur" style="min-width:40px">${c}</b><span class="${v > 0 ? "up" : v < 0 ? "dn" : "flat"}">${v > 0 ? "Bullish" : v < 0 ? "Bearish" : "Neutral"}</span><span class="st">score ${v > 0 ? "+" : ""}${v}</span></div>`,
+              )
+              .join("") +
+            '<div class="note">Score = better/worse × impact × surprise size. A rough guide, not advice.</div>'
+          : '<div class="empty">Nothing to score yet.</div>';
+
+        const inf = EV.filter((e) => e.cat === "Inflation").sort(
+          (a, b) => key(a) - key(b),
+        );
+        $("#infl").innerHTML = inf.length
+          ? inf
+              .map(
+                (e) =>
+                  `<div class="item"><span class="when">${e.date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}, ${esc(timeLabel(e))}</span><span><b class="cur">${e.ccy}</b> ${esc(e.name)} <span class="chip">${e.type}</span><br><span class="num st">${e.actual ? "actual " + esc(e.actual) + " · " : ""}${e.forecast ? "forecast " + esc(e.forecast) + " · " : ""}${e.previous ? "previous " + esc(e.previous) : ""}</span> ${e.actual ? result(e) : '<span class="st">' + status(e).toLowerCase() + "</span>"}</span></div>`,
+              )
+              .join("")
+          : '<div class="empty">No inflation events found.</div>';
+      }
+
+      function fillFilters() {
+        const cs = [...new Set(EV.map((e) => e.ccy))].sort(),
+          ts = [...new Set(EV.map((e) => e.type))].sort();
+        $("#fc").innerHTML =
+          '<option value="">All currencies</option>' +
+          cs.map((c) => `<option>${c}</option>`).join("");
+        $("#ft").innerHTML =
+          '<option value="">All types</option>' +
+          ts.map((c) => `<option>${c}</option>`).join("");
+      }
+      function filtered() {
+        const q = $("#q").value.toLowerCase(),
+          c = $("#fc").value,
+          t = F.type,
+          i = F.imp,
+          w = F.when;
+        const A = F.after ? new Date(F.after + "T00:00") : null,
+          B = F.before ? new Date(F.before + "T00:00") : null;
+        const wk = new Date(REF);
+        wk.setDate(wk.getDate() + 6);
+        return EV.filter((e) => {
+          const s = status(e);
+          return (
+            (!q || e.name.toLowerCase().includes(q)) &&
+            (!c || e.ccy === c) &&
+            (!t || e.type === t) &&
+            (!i || (i === "2" ? e.imp >= 2 : e.imp === +i)) &&
+            (!w ||
+              (w === "Previous"
+                ? s !== "Upcoming"
+                : w === "Today"
+                  ? e.date.getTime() === REF.getTime()
+                  : w === "Week"
+                    ? e.date >= REF && e.date <= wk
+                    : s === w)) &&
+            (!A || e.date >= A) &&
+            (!B || e.date <= B)
+          );
+        }).sort((a, b) => key(a) - key(b) || a.id - b.id);
+      }
+      function renderRows() {
+        const list = filtered();
+        let last = "",
+          h = "";
+        list.forEach((e) => {
+          const d = iso(e.date);
+          if (d !== last) {
+            last = d;
+            h += `<tr class="day${e.date.getTime() === REF.getTime() ? " today" : ""}"><td colspan="10">${fmtDate(e.date)}${e.date.getTime() === REF.getTime() ? " (today)" : ""}</td></tr>`;
+          }
+          const st = status(e);
+          h += `<tr><td class="num" data-l="Time">${esc(timeLabel(e))}</td><td class="cur" data-l="Currency">${e.ccy}</td><td class="ev" data-l="Event">${esc(e.name)}</td><td data-l="Impact">${bars(e.imp)}</td><td data-l="Type"><span class="chip${e.type === "CPI" || e.type === "PPI / prices" ? " k" : ""}">${e.type}</span></td><td class="num" data-l="Actual"><b>${esc(e.actual) || "–"}</b></td><td class="num" data-l="Forecast">${esc(e.forecast) || "–"}</td><td class="num" data-l="Previous">${esc(e.previous) || "–"}</td><td data-l="Result">${result(e)}</td><td data-l="Status" class="st ${st === "Released" ? "rel" : ""}">${st}</td></tr>`;
+        });
+        $("#rows").innerHTML =
+          h ||
+          '<tr><td colspan="10" class="empty" style="padding:16px">No events match these filters.</td></tr>';
+        $("#count").textContent =
+          list.length + " of " + EV.length + " events shown.";
+      }
+      function run() {
+        EV = parse($("#raw").value);
+        if (!EV.length) {
+          alert(
+            "No events found. Paste the full page text, including the day and time lines.",
+          );
+          return;
+        }
+        const r = $("#ref").value;
+        if (r) {
+          const p = r.split("-");
+          REF = new Date(+p[0], +p[1] - 1, +p[2]);
+        } else {
+          const first = EV.filter(
+            (e) => !e.actual && e.has && (e.forecast || e.previous),
+          ).sort((a, b) => key(a) - key(b))[0];
+          REF = first ? first.date : EV[EV.length - 1].date;
+          $("#ref").value = iso(REF);
+        }
+        fillFilters();
+        summarize();
+        setF({});
+        $("#out").classList.remove("hidden");
+        $("#out").scrollIntoView({ behavior: "smooth" });
+      }
+      function csv() {
+        const rows = [
+          [
+            "Date",
+            "Time",
+            "Currency",
+            "Event",
+            "Impact",
+            "Type",
+            "Actual",
+            "Forecast",
+            "Previous",
+            "Result",
+            "Status",
+          ],
+        ];
+        filtered().forEach((e) =>
+          rows.push([
+            iso(e.date),
+            e.time,
+            e.ccy,
+            e.name,
+            IMPL[e.imp],
+            e.type,
+            e.actual,
+            e.forecast,
+            e.previous,
+            e.dir === undefined
+              ? ""
+              : e.dir === 0
+                ? "In line"
+                : e.dir > 0
+                  ? "Better"
+                  : "Worse",
+            status(e),
+          ]),
+        );
+        const t = rows
+          .map((r) =>
+            r.map((v) => '"' + String(v).replace(/"/g, '""') + '"').join(","),
+          )
+          .join("\n");
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([t], { type: "text/csv" }));
+        a.download = "calendar-report.csv";
+        a.click();
+      }
+      const SAMPLE = [
+        "Wed",
+        "Oct 14",
+        "6:00pm",
+        "USD",
+        "Core CPI m/m",
+        "\t0.3%\t0.2%\t0.3%\t",
+        "USD",
+        "CPI y/y",
+        "\t3.7%\t3.6%\t3.4%\t",
+        "Thu",
+        "Oct 15",
+        "6:00pm",
+        "USD",
+        "PPI m/m",
+        "\t1.3%\t0.6%\t",
+        "0.5%",
+        "USD",
+        "Unemployment Claims",
+        "\t199K\t199K\t",
+        "198K",
+        "Wed",
+        "Oct 21",
+        "11:30am",
+        "GBP",
+        "CPI y/y",
+        "\t\t3.4%\t3.1%\t",
+        "GBP",
+        "PPI Output m/m",
+        "\t\t0.7%\t0.7%\t",
+        "6:30pm",
+        "GBP",
+        "BOE Gov Bailey Speaks",
+        "\t\t\t\t",
+      ].join("\n");
+      $("#go").onclick = run;
+      $("#sample").onclick = () => {
+        $("#raw").value = SAMPLE;
+        $("#ref").value = "";
+        run();
+      };
+      $("#clear").onclick = () => {
+        $("#raw").value = "";
+        $("#ref").value = "";
+        $("#out").classList.add("hidden");
+      };
+      const SETS = {
+        events: {},
+        released: { when: "Released" },
+        upcoming: { when: "Upcoming" },
+        "high impact": { imp: "3" },
+        "CPI events": { type: "CPI" },
+        "PPI / price events": { type: "PPI / prices" },
+        speeches: { type: "Speech" },
+      };
+      const BLANK = { when: "", imp: "", type: "", after: "", before: "" };
+      const F = Object.assign({}, BLANK);
+      function stat(n, l) {
+        return l in SETS
+          ? `<button class="stat" data-set="${esc(l)}"><b>${n}</b><span>${l}</span></button>`
+          : `<div class="stat"><b>${n}</b><span>${l}</span></div>`;
+      }
+      function syncUI() {
+        $("#ft").value = F.type;
+        $("#fi").value = F.imp;
+        $("#fa").value = F.after;
+        $("#fb").value = F.before;
+        document
+          .querySelectorAll("[data-when]")
+          .forEach((b) => b.classList.toggle("on", b.dataset.when === F.when));
+        document.querySelectorAll(".stat[data-set]").forEach((b) => {
+          const o = SETS[b.dataset.set];
+          b.classList.toggle(
+            "on",
+            Object.keys(F).every((k) => F[k] === (o[k] || "")),
+          );
+        });
+      }
+      function setF(o) {
+        Object.assign(F, BLANK, o);
+        syncUI();
+        if (EV.length) renderRows();
+      }
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-when],[data-set]");
+        if (!b || !EV.length) return;
+        if (b.dataset.set) {
+          setF(SETS[b.dataset.set]);
+          $("#tbl").scrollIntoView({ behavior: "smooth", block: "start" });
+        } else setF(Object.assign({}, F, { when: b.dataset.when }));
+      });
+      ["q", "fc"].forEach((id) =>
+        $("#" + id).addEventListener("input", () => EV.length && renderRows()),
+      );
+      $("#ft").addEventListener("change", () =>
+        setF(Object.assign({}, F, { type: $("#ft").value })),
+      );
+      $("#fi").addEventListener("change", () =>
+        setF(Object.assign({}, F, { imp: $("#fi").value })),
+      );
+      $("#fa").addEventListener("change", () =>
+        setF(Object.assign({}, F, { after: $("#fa").value })),
+      );
+      $("#fb").addEventListener("change", () =>
+        setF(Object.assign({}, F, { before: $("#fb").value })),
+      );
+      $("#reset").onclick = () => {
+        $("#q").value = "";
+        $("#fc").value = "";
+        setF({});
+      };
+      $("#ref").addEventListener("change", () => {
+        if (EV.length) run();
+      });
+      $("#csv").onclick = csv;
+      $("#print").onclick = () => window.print();
+    </script>
+  </body>
+</html>
